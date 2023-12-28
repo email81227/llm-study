@@ -1,13 +1,14 @@
+
+import openai
 import os
 
 from dotenv import load_dotenv
-from openai import OpenAI
 
 load_dotenv('.env')
 
-client = OpenAI(api_key=os.environ.get("openai_api_key"))
+openai.api_key = os.getenv('OPENAI_API_KEY')
 
-response = client.chat.completions.create(
+response = openai.ChatCompletion.create(
   model="gpt-3.5-turbo",
   messages=[
     {"role": "system", "content": "You are a helpful assistant."},
@@ -16,3 +17,5 @@ response = client.chat.completions.create(
     {"role": "user", "content": "Where was it played?"}
   ]
 )
+
+print(response.choices[0].message["content"])
