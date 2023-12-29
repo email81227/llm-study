@@ -9,55 +9,57 @@ Preparation
 * **English**
 
 1. Install [Anaconda](https://www.anaconda.com/download) or [Miniconda](https://docs.conda.io/projects/miniconda/en/latest/).
-2. Dowland or clone this repo
+2. Install [Git](https://git-scm.com/downloads)
+3. Dowland or clone this repo
 
         git clone https://github.com/email81227/llm-study.git
 
-3. Build the project enviroment
+4. Build the project enviroment
 
         conda create -n llm-study python=3.10 poetry
         
-4. Activate the env. (To deactivate, using `conda deactivate`)
+5. Activate the env. (To deactivate, using `conda deactivate`)
 
         conda avtivate llm-study 
         
-5. Switch to the project dir
+6. Switch to the project dir
 
         cd {path to the repo cloned}/llm-study
         
-6. Install packages by poetry
+7. Install packages by poetry
 
         poetry install
         
-7. Create `.env` file under the project dir
-8. Open `.env` and append the following line
+8. Create `.env` file under the project dir
+9. Open `.env` and append the following line
 
         OPENAI_API_KEY="{your openai key}"
         
 * **中文說明**
 
 1. 安裝 [Anaconda](https://www.anaconda.com/download) 或 [Miniconda](https://docs.conda.io/projects/miniconda/en/latest/)
-2. Dowland or clone this repo
+2. 安裝 [Git](https://git-scm.com/downloads)
+3. 下載或複製專案
 
         git clone https://github.com/email81227/llm-study.git
-3. 建立Python專案環境
+4. 建立Python專案環境
 
         conda create -n llm-study python=3.10 poetry
         
-4. 切換到該環境（用`conda deactivate`反過來切換回base env）
+5. 切換到該環境（用`conda deactivate`反過來切換回base env）
 
         conda avtivate llm-study 
         
-5. 切換到專案目錄下
+6. 切換到專案目錄下
         
         cd {path to the repo cloned}
         
-6. 安裝專案內套件
+7. 安裝專案內套件
 
         poetry install 
         
-7. 新增名為`.env`的空白檔案
-8. 打開或新增以下內容至`.env`中
+8. 新增名為`.env`的空白檔案
+9. 打開或新增以下內容至`.env`中
 
         OPENAI_API_KEY="{your openai key}"
 
