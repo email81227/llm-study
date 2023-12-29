@@ -10,7 +10,7 @@ Preparation
 
 1. Install [Anaconda](https://www.anaconda.com/download) or [Miniconda](https://docs.conda.io/projects/miniconda/en/latest/).
 2. Install [Git](https://git-scm.com/downloads)
-3. Dowland or clone this repo
+3. Change dir to the path you will place the project. Dowland or clone this repo
 
         git clone https://github.com/email81227/llm-study.git
 
@@ -39,9 +39,10 @@ Preparation
 
 1. 安裝 [Anaconda](https://www.anaconda.com/download) 或 [Miniconda](https://docs.conda.io/projects/miniconda/en/latest/)
 2. 安裝 [Git](https://git-scm.com/downloads)
-3. 下載或複製專案
+3. 移動到預計放置專案的目錄下，下載或複製專案
 
         git clone https://github.com/email81227/llm-study.git
+
 4. 建立Python專案環境
 
         conda create -n llm-study python=3.10 poetry
