@@ -10,6 +10,7 @@ packages = [{include = "llm_study"}]
 python = "^3.10"
 python-dotenv = "^1.0.0"
 urllib3 = "1.26.15"
+langchain = "^0.0.353"
 
 [tool.poetry.group.dev.dependencies]
 openai = "0.28"
