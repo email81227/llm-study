@@ -1,7 +1,5 @@
-# LLM讀書會 - 財報機器人專案
+# How to setting for the scripts
 
-
-This is a side project from one of the TAIA study groups. The purpose is to build a chatbot and interact with users to analyse and build a profitable investment for seeking alpha.
 
 Preparation / Installation environment
 ---
@@ -63,3 +61,36 @@ Preparation / Installation environment
 
         OPENAI_API_KEY="{your openai key}"
 
+
+Usage
+---
+* **English**
+
+
+* Execute the files inside the `examples` folder.
+* Or add your script and includ the following lines at beginning
+
+        import openai
+        import os
+
+        from dotenv import load_dotenv
+
+        load_dotenv('.env')
+
+        openai.api_key = os.getenv('OPENAI_API_KEY')
+
+        
+* **中文說明**
+
+
+* 執行位於 `examples` 中的檔案.
+* 自行增加你的`.py` or Jupyter notebook 並於開頭加入以下程式碼
+
+        import openai
+        import os
+
+        from dotenv import load_dotenv
+
+        load_dotenv('.env')
+
+        openai.api_key = os.getenv('OPENAI_API_KEY')
