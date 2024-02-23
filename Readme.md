@@ -19,7 +19,7 @@ Preparation / Installation environment
         
 5. Activate the env. (To deactivate, using `conda deactivate`)
 
-        conda avtivate llm-study 
+        conda activate llm-study 
         
 6. Switch to the project dir
 
@@ -48,7 +48,7 @@ Preparation / Installation environment
         
 5. 切換到該環境（用`conda deactivate`反過來切換回base env）
 
-        conda avtivate llm-study 
+        conda activate llm-study 
         
 6. 切換到專案目錄下
         
