@@ -1,12 +1,15 @@
 import asyncio
 import langchain
 
+from chatbot.callbacks import get_langfuse_callback
 from chatbot.llm import gpt
 from chatbot.prompts import *
 from chatbot.tools import get_tools
 
 
 async  def get_agent_chain(
+        session_id: str = None,
+        user_id: str = None,
         stream_callback: callable = None,
         top_k_messages: int = 5,
 ) -> langchain.agents.AgentChain:
