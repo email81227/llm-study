@@ -1,51 +1,23 @@
+from collections import defaultdict
+
 import chainlit as cl
 
-from langchain.chains import LLMChain
+from datetime import datetime
+from langchain.agents import AgentExecutor
+from langchain.memory import ConversationBufferMemory
+from langchain_core.runnables import RunnableConfig
 
 #
 from chatbot.agents import get_agent_chain
-from chatbot.callbacks import get_langfuse_callback
 from chatbot.config import settings
 from chatbot.split import pdf_preprocess, content_split, content_insert
-
-
-# @cl.on_chat_start
-# async def on_chat_start():
-#     from langchain.chat_models import ChatOpenAI
-#     from langchain.prompts import ChatPromptTemplate
-#     from langchain.schema import StrOutputParser
-#     # Get session ID
-#     session_id = cl.user_session.get("id")
-#
-#     model = ChatOpenAI(streaming=True)
-#     prompt = ChatPromptTemplate.from_messages(
-#         [
-#             (
-#                 "system",
-#                 "You're a very knowledgeable historian who provides accurate and eloquent answers to historical questions.",
-#             ),
-#             ("human", "{question}"),
-#         ]
-#     )
-#     chain = LLMChain(
-#         llm=model,
-#         prompt=prompt,
-#         callbacks=[
-#             get_langfuse_callback(
-#                 session_id=session_id,
-#                 user_id=settings.USER_EMAIL.split("@")[0]
-#             )
-#         ],
-#         output_parser=StrOutputParser()
-#     )
-#
-#     cl.user_session.set("chain", chain)
 
 
 @cl.on_chat_start
 async def on_chat_start():
     session_id = cl.user_session.get("id")
 
+    # Add agent to chainlit
     cl.user_session.set(
         "agent",
         await get_agent_chain(
@@ -54,42 +26,93 @@ async def on_chat_start():
         )
     )
 
+    # Add memory to chainlit
+    cl.user_session.set(
+        "memory",
+        ConversationBufferMemory(return_messages=True)
+    )
 
-@cl.on_chat_start
-async def ask_for_beginning():
     # Wait for the user to upload a file
     files = await cl.AskFileMessage(
         content="Please upload financial statements to begin!",
         accept=["application/pdf"],
-        max_files=10
+        max_files=10,
+        max_size_mb=50,
     ).send()
+
+    file_state = defaultdict(bool)
 
     # Process the uploaded files as needed
     for file in files:
         # Read PDF files
-        with open(file.path, "rb") as pdf:
-            content = pdf.read()
+        try:
+            with open(file.path, "rb") as pdf:
+                content = pdf.read()
 
-        # TODO: Run the preprocessing
-        processed_content = pdf_preprocess(content, )
+            # TODO: Run the preprocessing
+            processed_content = pdf_preprocess(content)
 
-        # TODO: Split the processed content
-        split_content = content_split(processed_content)
+            # TODO: Split the processed content
+            split_content = content_split(processed_content)
 
-        # TODO: Insert the content to database
-        insert_content = content_insert(split_content)
+            # TODO: Insert the content to database
+            insert_content = content_insert(split_content)
+
+            file_state[file.name] = True
+        except Exception as e:
+            file_state[file.name] = False
+
+    # Let the user know that the system is ready
+    success_file = ', '.join([k for k, v in file_state.items() if v])
+    failed_file = ', '.join([k for k, v in file_state.items() if not v])
+
+    message = f"{success_file} are uploaded successfully."
+    if failed_file:
+        message += f"{failed_file} are failed."
+
+    await cl.Message(
+        content=message
+    ).send()
 
 
 @cl.on_message
 async def on_message(message: cl.Message):
-    chain = cl.user_session.get("chain")  # type: LLMChain
+    agent = cl.user_session.get("agent")  # type: AgentExecutor
+    memory = cl.user_session.get("memory")  # type: ConversationBufferMemory
 
-    res = await chain.arun(
-        question=message.content,
-        callbacks=[
-            cl.LangchainCallbackHandler(),
-        ]
+    chainlit_callback = cl.AsyncLangchainCallbackHandler(
+        stream_final_answer=True,
+        answer_prefix_tokens=["Answer", ":"],
+        to_ignore=["Answer", ":"],
     )
 
-    await cl.Message(content=res).send()
+    # Getting the current date and time
+    now = datetime.now()
+
+    res: dict = await cl.make_async(agent.invoke)(
+        {
+            "input": message.content,
+            "date": now.strftime("%Y-%m-%d"),
+            "time": now.strftime("%H:%M:%S"),
+        },
+        config=RunnableConfig(
+            callbacks=[chainlit_callback]
+        )
+    )
+
+    elements = []
+    figure = cl.user_session.get("figure")
+    if figure:
+        elements.append(
+            cl.Plotly(name="chart", figure=figure, display="inline")
+        )
+
+    await cl.Message(
+        content=res.get('output'),
+        elements=elements
+    ).send()
+
+    memory.chat_memory.add_user_message(message.content)
+    memory.chat_memory.add_ai_message(res.get('output'))
+
 
