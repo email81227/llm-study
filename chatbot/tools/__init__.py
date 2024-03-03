@@ -1,6 +1,5 @@
 
-import langchain
-
+from langchain.tools import Tool
 from typing import List
 
 from chatbot.tools.python_tools import (
@@ -9,7 +8,7 @@ from chatbot.tools.python_tools import (
 )
 
 
-def get_tools() -> List[langchain.Tool]:
+def get_tools() -> List[Tool]:
     return [
         python_compute_tool,
         python_plot_tool,

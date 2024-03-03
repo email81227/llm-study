@@ -1,19 +1,43 @@
 import asyncio
-import langchain
 
-from chatbot.callbacks import get_langfuse_callback
-from chatbot.llm import gpt
-from chatbot.prompts import *
+from langchain.agents import (
+    create_structured_chat_agent,
+    create_react_agent,
+    AgentExecutor
+)
+from langchain_core.runnables import Runnable
+from chatbot.llm import get_openai_get
+from chatbot.prompts.agent_prompts import *
 from chatbot.tools import get_tools
 
 
-async  def get_agent_chain(
+async def get_agent_chain(
         session_id: str = None,
         user_id: str = None,
-        stream_callback: callable = None,
-        top_k_messages: int = 5,
-) -> langchain.agents.AgentChain:
-    return
+) -> Runnable:
+    # Get tools
+    tools = get_tools()
+
+    agent = create_structured_chat_agent(
+        llm=get_openai_get(session_id, user_id),
+        tools=tools,
+        prompt=STRUCTURE_PROMPT
+    )
+
+    # agent = create_react_agent(
+    #     llm=get_openai_get(session_id, user_id),
+    #     tools=tools,
+    #     prompt=REACT_PROMPT
+    # )
+
+    agent_executor = AgentExecutor(
+        agent=agent,
+        tools=tools,
+        verbose=True,
+        handle_parsing_errors=True
+    )
+
+    return agent_executor
 
 
 if __name__ == '__main__':
