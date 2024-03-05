@@ -17,6 +17,8 @@ langfuse = "^2.13.4"
 pydantic-settings = "^2.2.0"
 plotly = "^5.19.0"
 langchain-experimental = "^0.0.52"
+langchain-openai = "^0.0.8"
+pandas = "^2.2.1"
 
 [tool.poetry.group.dev.dependencies]
 python-dotenv = "^1.0.0"
