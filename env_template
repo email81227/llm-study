@@ -1,0 +1,7 @@
+# Fullfill the following attributes with your private infor and keys
+USER_NAME=<your nick name>
+USER_EMAIL=<your github email>>
+OPENAI_API_KEY=<your openai key>
+
+# Do not change the following lines
+LANGFUSE_PUBLIC_KEY="pk-lf-a37c4e08-b3b0-4bb5-b188-b5993f0557d6"
