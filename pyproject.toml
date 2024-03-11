@@ -20,6 +20,8 @@ langchain-experimental = "^0.0.52"
 pdfplumber = "^0.11.0"
 transformers = "^4.38.2"
 sentence-transformers = "^2.5.1"
+ocrmypdf = "^16.1.1"
+camelot-py = "^0.11.0"
 
 [tool.poetry.group.dev.dependencies]
 python-dotenv = "^1.0.0"
