@@ -10,9 +10,13 @@ packages = [{include = "llm_study"}]
 python = "^3.10"
 python-dotenv = "^1.0.0"
 urllib3 = "1.26.15"
-langchain = "0.1.0"
+langchain = "0.1.8"
 chainlit = "^1.0.200"
 openai = "1.12"
+langfuse = "^2.13.4"
+pydantic-settings = "^2.2.0"
+plotly = "^5.19.0"
+langchain-experimental = "^0.0.52"
 
 [tool.poetry.group.dev.dependencies]
 python-dotenv = "^1.0.0"

@@ -3,6 +3,12 @@
 
 This is a side project from one of the TAIA study groups. The purpose is to build a chatbot and interact with users to analyse and build a profitable investment for seeking alpha.
 
+# Important dependency docs/repo
+Langchain: [Doc]() | [Repo](https://github.com/langchain-ai/langchain)
+Langchain: [Doc]() | [Repo](https://github.com/Chainlit/chainlit)
+
+
+
 Preparation / Installation environment
 ---
 * **English**
@@ -62,4 +68,14 @@ Preparation / Installation environment
 9. 打開或新增以下內容至`.env`中
 
         OPENAI_API_KEY="{your openai key}"
+
+
+Execution
+---
+
+Run the command on project dir:
+
+```
+chainlit run chat.py -w
+```
 
