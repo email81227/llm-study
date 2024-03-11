@@ -17,6 +17,9 @@ langfuse = "^2.13.4"
 pydantic-settings = "^2.2.0"
 plotly = "^5.19.0"
 langchain-experimental = "^0.0.52"
+pdfplumber = "^0.11.0"
+transformers = "^4.38.2"
+sentence-transformers = "^2.5.1"
 
 [tool.poetry.group.dev.dependencies]
 python-dotenv = "^1.0.0"
