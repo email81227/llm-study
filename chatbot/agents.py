@@ -6,7 +6,7 @@ from langchain.agents import (
     AgentExecutor
 )
 from langchain_core.runnables import Runnable
-from chatbot.llm import get_openai_get
+from chatbot.llm import get_openai_gpt
 from chatbot.prompts.agent_prompts import *
 from chatbot.tools import get_tools
 
@@ -19,7 +19,7 @@ async def get_agent_chain(
     tools = get_tools()
 
     agent = create_structured_chat_agent(
-        llm=get_openai_get(session_id, user_id),
+        llm=get_openai_gpt(session_id, user_id),
         tools=tools,
         prompt=STRUCTURE_PROMPT
     )

@@ -10,7 +10,7 @@ from langchain_core.runnables import RunnableConfig
 #
 from chatbot.agents import get_agent_chain
 from chatbot.config import settings
-from chatbot.split import pdf_preprocess, content_split, content_insert
+from chatbot.split import PDFProcessor, content_insert
 
 
 @cl.on_chat_start
@@ -43,20 +43,14 @@ async def on_chat_start():
     file_state = defaultdict(bool)
 
     # Process the uploaded files as needed
+    processor = PDFProcessor()
+    paragraphs = []
     for file in files:
         # Read PDF files
         try:
-            with open(file.path, "rb") as pdf:
-                content = pdf.read()
+            docs = processor.run(file)
 
-            # TODO: Run the preprocessing
-            processed_content = pdf_preprocess(content)
-
-            # TODO: Split the processed content
-            split_content = content_split(processed_content)
-
-            # TODO: Insert the content to database
-            insert_content = content_insert(split_content)
+            paragraphs += docs
 
             file_state[file.name] = True
         except Exception as e:

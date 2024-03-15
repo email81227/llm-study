@@ -7,7 +7,7 @@ try:
     import torch
 
     if torch.cuda.is_available():
-        DEVICE = 'gpu'
+        DEVICE = 'cuda'
     else:
         DEVICE = 'cpu'
 
@@ -22,6 +22,9 @@ class Settings(BaseSettings):
     DEVICE: str = DEVICE
     EMBEDDING_MODEL: str = "sentence-transformers/LaBSE"
     # EMBEDDING_MODEL: str = "sentence-transformers/all-MiniLM-L6-v2"
+
+    COLLECTION_NAME: str = "FinState"
+    PERSIST_DIRECTORY: str = 'chroma/FinState'
 
     LANGFUSE_HOST: str = "https://cloud.langfuse.com"
     LANGFUSE_PUBLIC_KEY: str
