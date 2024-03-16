@@ -24,3 +24,8 @@ PROMPT_punish = (
 PROMPT_t187ap17_L = (
     ""
 )
+
+# 投資理財節目異常推介個股
+PROMPT_BFZFZU_T = (
+    ""
+)
