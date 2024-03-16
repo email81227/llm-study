@@ -26,10 +26,10 @@ def get_settings():
     return Settings()
 
 
-if settings.FinLAB_TOKEN is None:
-    print("Please register to FinLAB and get your personal token "
-          "in: https://ai.finlab.tw/api_token/ , then "
-          "copy the token in your .env file and named FinLAB_TOKEN.")
+# if settings.FinLAB_TOKEN is None:
+#     print("Please register to FinLAB and get your personal token "
+#           "in: https://ai.finlab.tw/api_token/ , then "
+#           "copy the token in your .env file and named FinLAB_TOKEN.")
 
 
 if settings.OPENAI_API_KEY is None:
