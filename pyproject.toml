@@ -22,6 +22,8 @@ pandas = "^2.2.1"
 pdfplumber = "^0.11.0"
 transformers = "^4.38.2"
 sentence-transformers = "^2.5.1"
+yfinance = "^0.2.37"
+finlab = "^1.0.9"
 
 [tool.poetry.group.dev.dependencies]
 python-dotenv = "^1.0.0"
