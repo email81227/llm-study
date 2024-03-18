@@ -5,7 +5,7 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    FinLAB_TOKEN: str
+    # FinLAB_TOKEN: str
 
     LANGFUSE_HOST: str = "https://cloud.langfuse.com"
 
