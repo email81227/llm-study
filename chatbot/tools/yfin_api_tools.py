@@ -28,6 +28,8 @@ class TWSE_CODE(BaseModel):
     exchange: str = Field(
         description="The exchange which equity listed on."
     )
+
+
 class TWSE_PRICE(TWSE_CODE):
     days: int = Field(
         description="The days length prices to request, no longer than 90 days."

@@ -10,7 +10,7 @@ from langchain_core.runnables import RunnableConfig
 #
 from chatbot.agents import get_agent_chain
 from chatbot.config import settings
-from chatbot.split import PDFProcessor, content_insert
+from chatbot.split import PDFProcessor
 
 
 @cl.on_chat_start
