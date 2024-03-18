@@ -4,8 +4,8 @@ import pandas as pd
 import yfinance as yf
 
 from langchain_core.documents import Document
-from langchain_core.tools import tool, BaseTool, StructuredTool
-from langchain_core.pydantic_v1 import BaseModel, Field
+from langchain_core.tools import BaseTool
+from langchain_core.pydantic_v1 import BaseModel
 from typing import Type, List
 
 from chatbot.prompts.yfin_api_prompt import (
@@ -15,29 +15,13 @@ from chatbot.prompts.yfin_api_prompt import (
     PROMPT_cashflow,
     PROMPT_prices
 )
-
-
-# Define the input schema
-class TWSE_CODE(BaseModel):
-    twse_code: str = Field(
-        description=(
-            "A 4-digit code or 5 digits and letters used to identify equities "
-            "listed on the Taiwan Stock Exchange or Taipei Exchange codes."
-        )
-    )
-    exchange: str = Field(
-        description="The exchange which equity listed on."
-    )
-class TWSE_PRICE(TWSE_CODE):
-    days: int = Field(
-        description="The days length prices to request, no longer than 90 days."
-    )
+from chatbot.tools.utils import AssetCodeExchange, AssetCodeExchangeDays
 
 
 class Dividends(BaseTool):
     name = "dividends"
     description = PROMPT_dividends
-    args_schema: Type[BaseModel] = TWSE_CODE
+    args_schema: Type[BaseModel] = AssetCodeExchange
     return_direct: bool = False
 
     def _run(self, twse_code: str, exchange: str="TWSE") -> Document:
@@ -79,7 +63,7 @@ class Dividends(BaseTool):
 class Prices(BaseTool):
     name = "prices"
     description = PROMPT_prices
-    args_schema: Type[BaseModel] = TWSE_PRICE
+    args_schema: Type[BaseModel] = AssetCodeExchangeDays
     return_direct: bool = False
 
     def _run(self, twse_code: str, exchange: str="TWSE", days: int=30) -> Document:
@@ -125,7 +109,7 @@ class Prices(BaseTool):
 class BalanceSheet(BaseTool):
     name = "balance_sheet"
     description = PROMPT_balance_sheet
-    args_schema: Type[BaseModel] = TWSE_CODE
+    args_schema: Type[BaseModel] = AssetCodeExchange
     return_direct: bool = False
 
     def _run(self, twse_code: str, exchange: str="TWSE") -> List[Document]:
@@ -171,7 +155,7 @@ class BalanceSheet(BaseTool):
 class IncomeStatement(BaseTool):
     name = "income_stmt"
     description = PROMPT_income_stmt
-    args_schema: Type[BaseModel] = TWSE_CODE
+    args_schema: Type[BaseModel] = AssetCodeExchange
     return_direct: bool = False
 
     def _run(self, twse_code: str, exchange: str="TWSE") -> List[Document]:
@@ -217,7 +201,7 @@ class IncomeStatement(BaseTool):
 class CashFlow(BaseTool):
     name = "cashflow"
     description = PROMPT_cashflow
-    args_schema: Type[BaseModel] = TWSE_CODE
+    args_schema: Type[BaseModel] = AssetCodeExchange
     return_direct: bool = False
 
     def _run(self, twse_code: str, exchange: str="TWSE") -> List[Document]:
