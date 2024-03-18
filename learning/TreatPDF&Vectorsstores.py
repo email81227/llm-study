@@ -47,7 +47,6 @@ retriever_vector = vectordb.as_retriever()
 
 
 #索引方式-compression上下文壓縮
-
 from langchain.retrievers import ContextualCompressionRetriever
 from langchain.retrievers.document_compressors import LLMChainExtractor
 
