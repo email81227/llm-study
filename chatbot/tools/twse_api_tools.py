@@ -1,7 +1,8 @@
-from typing import List
 
+from collections import defaultdict
 from langchain_core.tools import StructuredTool
 from langchain.docstore.document import Document
+from typing import List
 
 import json
 import requests
@@ -156,24 +157,29 @@ def open_data_t187ap02_L(twse_code: str = None) -> List[Document]:
     },
     :return:
     """
-    docs = {}
+    if twse_code is None:
+        return [Document(
+            page_content="資料過多，需指定特定股票代號"
+        )]
+
+    docs = defaultdict(list)
     resp = requests.get(f"{TWSE_OPEN_API_URL}/opendata/t187ap02_L")
     data = json.loads(resp.text)
 
     for row in data:
         if row["出表日期"]:
-            docs[row['股票代號']] = Document(
+            docs[row['公司代號']].append(Document(
                 page_content=dict2content(row),
                 metadata={
                     '公司代號': row['公司代號'],
                     '公司名稱': row['公司名稱'],
                     '出表日期': row['出表日期'],
                 }
-            )
+            ))
 
     if twse_code:
         if docs.get(twse_code, None):
-            return [docs[twse_code]]
+            return docs[twse_code]
     else:
         return list(docs.values())
 
