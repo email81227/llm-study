@@ -25,6 +25,7 @@ sentence-transformers = "^2.5.1"
 yfinance = "^0.2.37"
 finlab = "^1.0.9"
 faiss-cpu = "^1.8.0"
+chromadb = "^0.4.24"
 
 [tool.poetry.group.dev.dependencies]
 python-dotenv = "^1.0.0"
