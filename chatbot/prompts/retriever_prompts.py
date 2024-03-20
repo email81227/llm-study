@@ -1,5 +1,6 @@
 
 
-FinStatementRetrieverPrompt = (
-    "Useful to search the content in the financial statements. "
+RetrieverPrompt = (
+    "Useful to search the content in the financial statements or"
+    " share holder annual reports. "
 )

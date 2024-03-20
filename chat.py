@@ -10,7 +10,6 @@ from langchain_core.runnables import RunnableConfig
 #
 from chatbot.agents import get_agent_chain
 from chatbot.config import settings
-from chatbot.split import PDFProcessor
 
 
 @cl.on_chat_start
@@ -31,42 +30,6 @@ async def on_chat_start():
         "memory",
         ConversationBufferMemory(return_messages=True)
     )
-
-    # Wait for the user to upload a file
-    files = await cl.AskFileMessage(
-        content="Please upload financial statements to begin!",
-        accept=["application/pdf"],
-        max_files=10,
-        max_size_mb=50,
-    ).send()
-
-    file_state = defaultdict(bool)
-
-    # Process the uploaded files as needed
-    processor = PDFProcessor()
-    paragraphs = []
-    for file in files:
-        # Read PDF files
-        try:
-            docs = processor.run(file)
-
-            paragraphs += docs
-
-            file_state[file.name] = True
-        except Exception as e:
-            file_state[file.name] = False
-
-    # Let the user know that the system is ready
-    success_file = ', '.join([k for k, v in file_state.items() if v])
-    failed_file = ', '.join([k for k, v in file_state.items() if not v])
-
-    message = f"{success_file} are uploaded successfully."
-    if failed_file:
-        message += f"{failed_file} are failed."
-
-    await cl.Message(
-        content=message
-    ).send()
 
 
 @cl.on_message

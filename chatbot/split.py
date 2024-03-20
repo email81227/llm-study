@@ -49,6 +49,9 @@ if __name__ == '__main__':
     import glob
 
     from chatbot.config import settings
+    from chatbot.vectorstore import chroma
 
     files = glob.glob(f"{settings.FS_STORE_PATH}/*/*")
     pdfs_loader(files=files, size=512, overlap=32, embed="openai")
+
+    chroma.persist()
