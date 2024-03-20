@@ -18,6 +18,7 @@ except ModuleNotFoundError:
 
 class Settings(BaseSettings):
     # FinLAB_TOKEN: str
+    # FinLAB_TOKEN: str
 
     FORCE_OCR_PDF: bool = True
 
