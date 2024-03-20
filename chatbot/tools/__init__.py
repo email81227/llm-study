@@ -24,6 +24,8 @@ from chatbot.tools.yfin_api_tools import (
     prices
 )
 
+from chatbot.tools.vectordb_retriever_tool import search_document_tool
+
 # from chatbot.tools.finlab_tools import
 
 
@@ -31,6 +33,7 @@ def get_tools() -> List[Tool]:
     return [
         python_compute_tool,
         python_plot_tool,
+        search_document_tool,
         t187ap02_L,
         t187ap04_L,
         t187ap17_L,

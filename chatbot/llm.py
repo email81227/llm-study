@@ -5,7 +5,7 @@ from chatbot.callbacks import get_langfuse_callback
 # https://platform.openai.com/docs/models
 
 
-def get_openai_get(session_id: str = None, user_id: str = None):
+def get_openai_gpt(session_id: str = None, user_id: str = None):
     return ChatOpenAI(
         streaming=True,
         callbacks=[

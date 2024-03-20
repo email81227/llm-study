@@ -1,7 +1,6 @@
 
 from langchain_community.embeddings import HuggingFaceEmbeddings
-from langchain_openai import OpenAIEmbeddings
-
+from langchain_community.embeddings import OpenAIEmbeddings
 from chatbot.config import settings
 
 
@@ -11,8 +10,7 @@ hf_embeddings = HuggingFaceEmbeddings(
     encode_kwargs={'normalize_embeddings': False}
 )
 
-
-openai_embedding = OpenAIEmbeddings(
+openai_ai_embeddings = OpenAIEmbeddings(
     openai_api_key=settings.OPENAI_API_KEY
 )
 
