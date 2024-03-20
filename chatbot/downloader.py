@@ -1,67 +1,101 @@
 
-from typing import Any, List, Optional, Tuple
-
-import pandas as pd
+import os
 import requests
+import time
 
 from bs4 import BeautifulSoup
+from chatbot.logger import logger
+from chatbot.config import settings
 
 
-# https://mops.twse.com.tw/server-java/t164sb01?SYEAR=2023&file_name=tifrs-fr1-m1-ci-cr-2330-2023Q4.html#BalanceSheet
-def download_fs(eq_code: str, year: int=2023, season: int=4):
-    season = f"Q{season}"
+def download_report(eq_id: str, year: int, mtype: str = 'F', dtype: str = "F04"):
+    """
+    Able to download report:
+    mtype = "A", dtype = "AI1;  Financial statement
+    mtype = "F", dtype = "F04;  股東會年報
+    mtype = "F", dtype = "F05;  股東會議事錄
 
-    url = (
-        f"https://mops.twse.com.tw/server-java/"
-        f"t164sb01?SYEAR={year}&"
-        f"file_name=tifrs-fr1-m1-ci-cr-{eq_code}-{year}{season}.html"
-    )
+    :param eq_id:
+    :param year:
+    :param mtype:
+    :param dtype:
+    :return:
+    """
+    url = 'https://doc.twse.com.tw/server-java/t57sb01'
 
-    resp = requests.get(url)
-
-    if resp.status_code != 200:
-        return
-
-    extract_fs(resp)
-
-
-def columns_name_handler(columns: Any) -> Tuple[Any, List[str]]:
-    tab_name = None
-    col_names = []
-
-    if isinstance(columns, pd.MultiIndex):
-        for tab_name, col_name in columns:
-            col_names.append(col_name)
-
-        return tab_name, col_names
+    if year // 1000 > 0:
+        tw_year = year - 1911
     else:
-        return None, list(columns)
+        tw_year = year
+
+    # Parameters
+    data = {
+        "id": "",
+        "key": "",
+        "step": "1",
+        "co_id": eq_id,
+        "year": tw_year,
+        "seamon": "",
+        "mtype": mtype,
+        "dtype": dtype # F04: 股東會年報, F05: 股東會議事錄, F04: 股東會年報
+    }
+    try:
+        # request data
+        response = requests.post(url, data=data)
+        # Get file name
+        content = BeautifulSoup(response.text, 'html.parser')
+        files = content.findAll('a')
+        logger.info(f"Get file's link: {[f.text for f in files]}")
+    except Exception as e:
+        logger.info(f"Error: {e}")
+        files = []
+
+    for file in files:
+        # Parameters again
+        data2 = {
+            'step': '9',
+            'kind': mtype,
+            'co_id': eq_id,
+            'filename': file.text  # 檔案名稱
+        }
+        try:
+            # request data
+            response = requests.post(url, data=data2)
+            link = BeautifulSoup(response.text, 'html.parser')
+            # Get PDF url
+            file_link = link.find('a').get('href')
+            logger.info(f"Get download link {file_link} for {file.text}")
+        except Exception as e:
+            logger.info(f"Error: {e}")
+
+        # 發送 GET 請求
+        try:
+            response = requests.get('https://doc.twse.com.tw' + file_link)
+
+            store_path = f"{settings.FS_STORE_PATH}/{dtype}"
+            if not os.path.exists(f"{settings.FS_STORE_PATH}/{dtype}"):
+                os.makedirs(store_path, exist_ok=True)
+
+            # Download PDF
+            with open(f"{store_path}/{year}_{eq_id}_{dtype}-{file.text}.pdf", 'wb') as f:
+                f.write(response.content)
+            logger.info(f"Download {file.text} successfully. "
+                        f"Stored in {store_path}. "
+                        f"Named {year}_{eq_id}_{dtype}-{file.text}.pdf")
+        except Exception as e:
+            logger.info(f"Error: {e}")
+
+        time.sleep(2)
 
 
-# def extract_balance_sheet(tab: pd.DataFrame) -> pd.DataFrame:
-#     tab_name, cols = columns_name_handler(tab.columns)
-#
-#     seq_terms = []
-#     top_terms = ['資產Assets', '負債及權益liabilities and equity']
-#     for il, row in tab.iterrows():
-#         elements = row.values
-#         if pd.isna(elements[0]):
-#             seq_terms.append(seq_terms)
-#
-#     return
+if __name__ == '__main__':
+    # Example:
 
+    # Financial statement Q1 - Q4 in 2022, save in {project dir}/data/{AI1}
+    download_report("2330", 2022, "A", "AI1")
 
-def clean_soup(content):
-    for tags in content.findAll(True):
-        tags.attrs = {}
-    return content
+    # 股東會年報 2022
+    download_report("2330", 2022, "F", "F04")
 
-
-# 財務報表索引
-def extract_fs(soup: BeautifulSoup):
-    # body > div.container > div.content > span:nth-child(21) > table
-    sub_soup = soup.select(
-        'body > div.container > div.content > span:nth-child(21) > table'
-    )[0]
-
-
+    # 股東會議事錄 2022
+    download_report("2330", 2022, "F", "F04")
