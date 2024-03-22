@@ -39,11 +39,13 @@ class AssetCode(BaseModel):
 # Define the input schema
 class AssetCodeExchange(AssetCode):
     exchange: str = Field(
+        default="TWSE",
         description="The exchange which equity listed on."
     )
 
 
 class AssetCodeExchangeDays(AssetCodeExchange):
     days: int = Field(
+        default=30,
         description="The days length prices to request, no longer than 90 days."
     )
