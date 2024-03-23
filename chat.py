@@ -37,6 +37,8 @@ async def on_message(message: cl.Message):
     agent = cl.user_session.get("agent")  # type: AgentExecutor
     memory = cl.user_session.get("memory")  # type: ConversationBufferMemory
 
+    cl.user_session.set("figure", None)
+
     chainlit_callback = cl.AsyncLangchainCallbackHandler(
         stream_final_answer=True,
         answer_prefix_tokens=["Answer", ":"],
@@ -62,7 +64,7 @@ async def on_message(message: cl.Message):
 
     elements = []
     figure = cl.user_session.get("figure")
-    if figure:
+    if figure and figure not in elements:
         elements.append(
             cl.Plotly(name="chart", figure=figure, display="inline")
         )
