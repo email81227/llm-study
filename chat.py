@@ -45,12 +45,14 @@ async def on_message(message: cl.Message):
 
     # Getting the current date and time
     now = datetime.now()
+    tw_year = now.year - 1911
 
     res: dict = await cl.make_async(agent.invoke)(
         {
             "input": message.content,
             "date": now.strftime("%Y-%m-%d"),
             "time": now.strftime("%H:%M:%S"),
+            "tw_year": tw_year,
         },
         config=RunnableConfig(
             callbacks=[chainlit_callback]

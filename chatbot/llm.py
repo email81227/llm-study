@@ -11,8 +11,8 @@ def get_openai_gpt(session_id: str = None, user_id: str = None):
         callbacks=[
             get_langfuse_callback(session_id, user_id),
         ],
-        # model_name="gpt-4-turbo-preview",
-        model_name="gpt-3.5-turbo-0125",
+        model_name="gpt-4-turbo-preview",
+        # model_name="gpt-3.5-turbo-0125",
         openai_api_key=settings.OPENAI_API_KEY,
         max_tokens=settings.MAX_TOKENS,
         temperature=0.0
