@@ -53,6 +53,7 @@ async def on_message(message: cl.Message):
             "date": now.strftime("%Y-%m-%d"),
             "time": now.strftime("%H:%M:%S"),
             "tw_year": tw_year,
+            settings.MEMORY_KEY: memory.chat_memory.messages,
         },
         config=RunnableConfig(
             callbacks=[chainlit_callback]
