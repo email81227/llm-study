@@ -67,7 +67,8 @@ Action:
 
 Begin! Reminder to ALWAYS respond with a valid json blob of a single action. Use tools if necessary. Respond directly if appropriate. Format is Action:```$JSON_BLOB```then Observation'''
 
-INPUT_PROMPT = '''Now is {date} {time}. {input}
+INPUT_PROMPT = '''今天是 {date} (民國{tw_year}年，簡稱{tw_year}年)，現在時間為 {time}。 {input}
+請使用繁體中文回應使用者。
 
 {agent_scratchpad}
 
