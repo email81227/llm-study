@@ -88,10 +88,10 @@ def open_data_t187ap04_L(twse_code: str = None) -> List[Document]:
 
     for row in data:
         if row["出表日期"]:
-            docs[row['股票代號']] = Document(
+            docs[row['公司代號']] = Document(
                 page_content=dict2content(row),
                 metadata={
-                    '股票代號': row['股票代號'],
+                    '股票代號': row['公司代號'],
                     '公司名稱': row['公司名稱'],
                     '出表日期': row['出表日期'],
                     '發言日期': row['發言日期'],
